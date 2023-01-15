@@ -46,7 +46,8 @@ const appointments = {
 };
 
 export default function Application(props) {
-  const [day, setDay] = useState([]);
+  const [day, setDay] = useState('Monday');
+  const [days, setDays] = useState([]);
 
   const appointmentsArr = Object.values(appointments).map(app => {
     return <Appointment key={app.id} {...app} />;
@@ -54,7 +55,10 @@ export default function Application(props) {
 
   useEffect(() => {
     Axios.get('/api/days')
-      .then(res => setDay(res.data));
+      .then(res => {
+        console.log(res.data);
+        setDays(res.data);
+      });
   }, []);
 
   return (
@@ -66,7 +70,7 @@ export default function Application(props) {
           alt="Interview Scheduler" />
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
-          <DayList days={day} value={day} onChange={setDay} />
+          <DayList days={days} value={day} onChange={setDay} />
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"
