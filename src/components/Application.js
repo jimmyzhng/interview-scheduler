@@ -5,7 +5,7 @@ import "components/Application.scss";
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
 import "components/Appointment";
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -17,17 +17,16 @@ export default function Application(props) {
 
   // Use selectors helper function to get appointments based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log('daily appointments', dailyAppointments);
+  // console.log('daily appointments', dailyAppointments);
 
   // Selector function that takes in our appointments, and creates an array that we display
   const appointmentsArr = dailyAppointments.map(app => {
     // We need to transform the interview before passing it as a prop, since the data we 
     // retrieved from the api is an object of objects.
-    // const interview = getInterview(state, app.interview);
+    const interview = getInterview(state, app.interview);
 
     return <Appointment key={app.id} id={app.id} time={app.time} interview={interview} />;
   });
-  console.log('');
 
   const setDay = day => setState({ ...state, day });
   // const setDays = days => setState(prev => ({ ...prev, days }));
@@ -44,7 +43,6 @@ export default function Application(props) {
     ])
       // Our res is an array of the response received: [{days}, {appts}]
       .then(res => {
-        console.log(res[2].data);
         setState(prev => ({ ...prev, days: res[0].data, appointments: res[1].data, interviewers: res[2].data }));
       });
   }, []);
