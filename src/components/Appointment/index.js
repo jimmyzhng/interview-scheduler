@@ -11,6 +11,7 @@ export default function Appointment(props) {
   const SHOW = "SHOW";
   const CREATE = "CREATE";
 
+  // using our hook to create functions that we use for the onClick functionality of our site
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );

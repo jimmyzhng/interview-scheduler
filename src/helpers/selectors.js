@@ -18,6 +18,25 @@ export function getAppointmentsForDay(state, day) {
   return apptsArray;
 }
 
+export function getInterviewersForDay(state, day) {
+  // Returns array of interviewers for the day
+  let interviewersArray = [];
+
+  for (const stateDay in state.days) {
+    let dayObj = state.days[stateDay];
+
+    if (dayObj.name === day) {
+      let interviewersArrNoInfo = [...dayObj.interviewers];
+
+      for (let interviewer of interviewersArrNoInfo) {
+        interviewersArray.push(state.interviewers[interviewer]);
+
+      }
+    }
+  }
+  return interviewersArray;
+}
+
 export function getInterview(state, interview) {
   // return a new object containing interview data (with interviewer info) that we can use as a prop
   // It is needed because the prop requires the data in a specific way - where the interviewer key 
