@@ -43,7 +43,7 @@ export function getInterview(state, interview) {
   // has the interviewer's info object as the value
   // It is currently only displaying the interviewer's id (1 in the example)
 
-  console.log('state.interviews', state.interviews);
+  // console.log('state.interviews', state.interviews);
 
   if (interview) {
     let interviewerId = interview.interviewer;

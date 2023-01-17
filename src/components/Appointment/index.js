@@ -5,11 +5,16 @@ import Show from "./Show";
 import Empty from "./Empty";
 import useVisualMode from "hooks/useVisualMode";
 import Form from "./Form";
+import Status from "./Status";
+import Confirm from "./Confirm";
 
 export default function Appointment(props) {
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
+  const SAVING = "SAVING";
+  const CONFIRM = "CONFIRM";
+  const DELETING = "DELETING";
 
   // using our hook to create functions that we use for the onClick functionality of our site
   const { mode, transition, back } = useVisualMode(
@@ -18,18 +23,28 @@ export default function Appointment(props) {
 
   // We pass this to form component (saves name, interviewer) that is passed to onSave as arguments
   function save(name, interviewer) {
+    transition(SAVING);
 
     const interview = {
       student: name,
       interviewer
     };
-    // console.log('interviewer', interviewer);
 
     props.bookInterview(props.id, interview);
     transition(SHOW);
   }
 
-  console.log('props interview', props?.interview);
+  function deleteInterview(id) {
+    props.cancelInterview(id);
+    transition(DELETING);
+    transition(EMPTY);
+  }
+
+  function confirmDelete() {
+    transition(CONFIRM);
+  }
+
+  // console.log('props interview', props?.interview);
 
   return (
     <article className="appointment">
@@ -42,6 +57,7 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          onDelete={confirmDelete}
         />
       }
 
@@ -51,9 +67,26 @@ export default function Appointment(props) {
           interviewer={props.interviewer}
           interviewers={props.interviewers}
           onSave={save}
-          onCancel={() => back()}
+          onCancel={back}
         />
       }
+
+      {mode === SAVING &&
+        <Status message={"Saving"} />
+      }
+
+      {mode === SAVING &&
+        <Status message={"Deleting"} />
+      }
+
+      {mode === CONFIRM &&
+        <Confirm
+          onCancel={back}
+          onConfirm={() => deleteInterview(props.id)}
+          message={"Are you sure you would like to delete?"}
+        />
+      }
+
     </article>
   );
 

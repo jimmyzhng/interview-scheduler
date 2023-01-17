@@ -15,9 +15,11 @@ export default function Application(props) {
     interviewers: {}
   });
 
+  console.log('state.appointments', state.appointments);
   // Use selectors helper function to get appointments based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log('daily appointments', dailyAppointments);
+  // console.log('daily appointments', dailyAppointments);
+
   const interviewers = getInterviewersForDay(state, state.day);
 
   // Selector function that takes in our appointments, and creates an array that we display
@@ -33,11 +35,11 @@ export default function Application(props) {
       time={app.time}
       interview={interview}
       interviewers={interviewers}
-      bookInterview={bookInterview} />;
+      bookInterview={bookInterview}
+      cancelInterview={cancelInterview} />;
   });
 
   const setDay = day => setState({ ...state, day });
-  // const setDays = days => setState(prev => ({ ...prev, days }));
 
   function bookInterview(id, interview) {
 
@@ -54,13 +56,18 @@ export default function Application(props) {
     Axios.put(`/api/appointments/${id}`, appointment)
       .then(res => {
         console.log(res);
-        setState({ ...state, appointments });
       });
 
+    setState({ ...state, appointments });
 
+  }
 
-
-
+  function cancelInterview(id) {
+    return Axios.delete(`/api/appointments/${id}`)
+      .then(() => {
+        setState({ ...state });
+      })
+      .catch(err => console.log('axios delete error', err));
   }
 
   // Getting the data from scheduler-api with axios
