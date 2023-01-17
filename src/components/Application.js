@@ -18,7 +18,7 @@ export default function Application(props) {
   console.log('state.appointments', state.appointments);
   // Use selectors helper function to get appointments based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  // console.log('daily appointments', dailyAppointments);
+  console.log('daily appointments', dailyAppointments);
 
   const interviewers = getInterviewersForDay(state, state.day);
 
@@ -68,6 +68,10 @@ export default function Application(props) {
         setState({ ...state });
       })
       .catch(err => console.log('axios delete error', err));
+  }
+
+  function editInterview() {
+
   }
 
   // Getting the data from scheduler-api with axios

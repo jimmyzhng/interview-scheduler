@@ -15,7 +15,9 @@ export default function Appointment(props) {
   const SAVING = "SAVING";
   const CONFIRM = "CONFIRM";
   const DELETING = "DELETING";
+  const EDIT = "EDIT";
 
+  console.log('props.interview', props.interview);
   // using our hook to create functions that we use for the onClick functionality of our site
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -44,7 +46,10 @@ export default function Appointment(props) {
     transition(CONFIRM);
   }
 
-  // console.log('props interview', props?.interview);
+  function edit(id) {
+    transition(EDIT);
+  }
+
 
   return (
     <article className="appointment">
@@ -57,6 +62,7 @@ export default function Appointment(props) {
         <Show
           student={props.interview.student}
           interviewer={props.interview.interviewer}
+          onEdit={edit}
           onDelete={confirmDelete}
         />
       }
@@ -70,12 +76,21 @@ export default function Appointment(props) {
           onCancel={back}
         />
       }
+      {mode === EDIT &&
+        <Form
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id}
+          interviewers={props.interviewers}
+          onSave={save}
+          onCancel={back}
+        />
+      }
 
       {mode === SAVING &&
         <Status message={"Saving"} />
       }
 
-      {mode === SAVING &&
+      {mode === DELETING &&
         <Status message={"Deleting"} />
       }
 
