@@ -9,7 +9,7 @@ import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "help
 
 export default function Application(props) {
   const [state, setState] = useState({
-    day: "Monday",
+    day: "",
     days: [],
     appointments: {},
     interviewers: {}
@@ -17,7 +17,7 @@ export default function Application(props) {
 
   // Use selectors helper function to get appointments based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  // console.log('daily appointments', dailyAppointments);
+  console.log('daily appointments', dailyAppointments);
   const interviewers = getInterviewersForDay(state, state.day);
 
   // Selector function that takes in our appointments, and creates an array that we display
@@ -26,11 +26,35 @@ export default function Application(props) {
     // retrieved from the api is an object of objects.
     const interview = getInterview(state, app.interview);
 
-    return <Appointment key={app.id} id={app.id} time={app.time} interview={interview} interviewers={interviewers} />;
+    return <Appointment
+      key={app.id}
+      {...app}
+      id={app.id}
+      time={app.time}
+      interview={interview}
+      interviewers={interviewers}
+      bookInterview={bookInterview} />;
   });
 
   const setDay = day => setState({ ...state, day });
   // const setDays = days => setState(prev => ({ ...prev, days }));
+
+  function bookInterview(id, interview) {
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    setState({ ...state, appointments });
+
+
+  }
 
   // Getting the data from scheduler-api with axios
   // Promise.all resolves all promises, and returns array of resolved values matching

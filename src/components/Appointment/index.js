@@ -16,6 +16,21 @@ export default function Appointment(props) {
     props.interview ? SHOW : EMPTY
   );
 
+  // We pass this to form component (saves name, interviewer) that is passed to onSave as arguments
+  function save(name, interviewer) {
+
+    const interview = {
+      student: name,
+      interviewer
+    };
+    // console.log('interviewer', interviewer);
+
+    props.bookInterview(props.id, interview);
+    transition(SHOW);
+  }
+
+  console.log('props interview', props?.interview);
+
   return (
     <article className="appointment">
       <Header time={props.time}></Header>
@@ -35,7 +50,7 @@ export default function Appointment(props) {
           student={props.student}
           interviewer={props.interviewer}
           interviewers={props.interviewers}
-          onSave={props.onSave}
+          onSave={save}
           onCancel={() => back()}
         />
       }
