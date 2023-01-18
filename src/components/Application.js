@@ -15,15 +15,14 @@ export default function Application(props) {
     interviewers: {}
   });
 
-  console.log('state.appointments', state.appointments);
   // Use selectors helper function to get appointments based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log('daily appointments', dailyAppointments);
+  // console.log('daily appointments', Boolean(dailyAppointments));
 
   const interviewers = getInterviewersForDay(state, state.day);
-
   // Selector function that takes in our appointments, and creates an array that we display
   const appointmentsArr = dailyAppointments.map(app => {
+
     // We need to transform the interview before passing it as a prop, since the data we 
     // retrieved from the api is an object of objects.
     const interview = getInterview(state, app.interview);
@@ -53,25 +52,30 @@ export default function Application(props) {
       [id]: appointment
     };
 
-    Axios.put(`/api/appointments/${id}`, appointment)
-      .then(res => {
-        console.log(res);
-      });
-
-    setState({ ...state, appointments });
+    return Axios.put(`/api/appointments/${id}`, appointment)
+      .then(() => setState({ ...state, appointments }))
+      .catch(err => console.log(err));
 
   }
 
   function cancelInterview(id) {
-    return Axios.delete(`/api/appointments/${id}`)
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return Axios
+      .delete(`/api/appointments/${id}`)
       .then(() => {
-        setState({ ...state });
+        setState({ ...state, appointments });
       })
-      .catch(err => console.log('axios delete error', err));
-  }
-
-  function editInterview() {
-
+      .catch(err => console.log(err));
   }
 
   // Getting the data from scheduler-api with axios
@@ -109,6 +113,7 @@ export default function Application(props) {
 
       <section className="schedule">
         {appointmentsArr}
+        {dailyAppointments.length !== 0 && <Appointment key="last" time="5pm" />}
       </section>
     </main>
   );
