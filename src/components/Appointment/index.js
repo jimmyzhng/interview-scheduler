@@ -27,8 +27,6 @@ export default function Appointment(props) {
 
   // We pass this to form component (saves name, interviewer) that is passed to onSave as arguments
   function save(name, interviewer) {
-    console.log('name', name);
-    console.log('interviewer', interviewer);
     const interview = {
       student: name,
       interviewer
@@ -38,12 +36,12 @@ export default function Appointment(props) {
 
     props.bookInterview(props.id, interview)
       .then(() => transition(SHOW))
-      .catch((err) => transition(ERROR_SAVE, true));
+      .catch(() => transition(ERROR_SAVE, true));
 
   }
 
   function deleteInterview(id) {
-    transition(DELETING);
+    transition(DELETING, true);
 
     props.cancelInterview(id)
       .then(() => transition(EMPTY))
@@ -110,11 +108,11 @@ export default function Appointment(props) {
       }
 
       {mode === ERROR_SAVE &&
-        <Error message={"Could not save."} onClose={() => transition(SHOW)} />
+        <Error message={"Could not save."} onClose={back} />
       }
 
       {mode === ERROR_DELETE &&
-        <Error message={"Could not delete."} onClose={() => transition(SHOW)} />
+        <Error message={"Could not delete."} onClose={back} />
       }
 
     </article>

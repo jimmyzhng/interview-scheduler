@@ -1,25 +1,25 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import Axios from "axios";
 import "components/Application.scss";
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
 import "components/Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
-  const [state, setState] = useState({
-    day: "",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
 
-  // Use selectors helper function to get appointments based on current state of day
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
+
+  // Use selectors helper functions to get appointments/interviewers based on current state of day
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   // console.log('daily appointments', Boolean(dailyAppointments));
-
   const interviewers = getInterviewersForDay(state, state.day);
+
   // Selector function that takes in our appointments, and creates an array that we display
   const appointmentsArr = dailyAppointments.map(app => {
 
@@ -37,62 +37,6 @@ export default function Application(props) {
       bookInterview={bookInterview}
       cancelInterview={cancelInterview} />;
   });
-
-  const setDay = day => setState({ ...state, day });
-
-  function bookInterview(id, interview) {
-
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
-    return Axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => setState({ ...state, appointments }))
-      .catch(err => console.log(err));
-
-  }
-
-  function cancelInterview(id) {
-
-    const appointment = {
-      ...state.appointments[id],
-      interview: null
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
-    return Axios
-      .delete(`/api/appointments/${id}`)
-      .then(() => {
-        setState({ ...state, appointments });
-      })
-      .catch(err => console.log(err));
-  }
-
-  // Getting the data from scheduler-api with axios
-  // Promise.all resolves all promises, and returns array of resolved values matching
-  // the order of the array passed to it
-  useEffect(() => {
-
-    Promise.all([
-      Axios.get('/api/days'),
-      Axios.get('/api/appointments'),
-      Axios.get('/api/interviewers')
-    ])
-      // Our res is an array of the response received: [{days}, {appts}]
-      .then(res => {
-        setState(prev => ({ ...prev, days: res[0].data, appointments: res[1].data, interviewers: res[2].data }));
-      });
-  }, []);
 
   return (
     <main className="layout">
