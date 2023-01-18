@@ -59,7 +59,7 @@ export default function useApplicationData() {
   // the order of the array passed to it
   useEffect(() => {
 
-    return Promise.all([
+    Promise.all([
       Axios.get('/api/days'),
       Axios.get('/api/appointments'),
       Axios.get('/api/interviewers')
