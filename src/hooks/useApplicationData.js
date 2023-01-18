@@ -1,9 +1,6 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import "components/Application.scss";
-import DayList from "components/DayList";
-import Appointment from "components/Appointment";
 import "components/Appointment";
 
 export default function useApplicationData() {
@@ -30,7 +27,10 @@ export default function useApplicationData() {
     };
 
     return Axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => setState({ ...state, appointments }));
+      .then(() => {
+        const updatedDays = updateSpots(state, appointments);
+        setState({ ...state, appointments, days: updatedDays });
+      });
 
   }
 
@@ -50,8 +50,31 @@ export default function useApplicationData() {
     return Axios
       .delete(`/api/appointments/${id}`)
       .then(() => {
-        setState({ ...state, appointments });
+        const updatedDays = updateSpots(state, appointments);
+        setState({ ...state, appointments, days: updatedDays });
       });
+  }
+
+  function updateSpots(state, appointments) {
+    // find the day matching state.day, save its object into dayObj
+    const dayObj = state.days.find(element => element.name === state.day);
+    console.log('#1', appointments);
+
+    // counter for spots
+    let spots = 0;
+    // iterate through ids of appointments array in dayObj
+    for (const id of dayObj.appointments) {
+      // appointment is at appointments index of [id]
+      const appointment = appointments[id];
+      // if not appointment (appointments of [id]).interview = null, spots++
+      if (!appointment.interview) {
+        spots++;
+      }
+    }
+    // new day object that copies contents of dayObj and inserts 'spots'
+    const day = { ...dayObj, spots };
+    // return an updated state.days array ; if day name matches, return day, otherwise return element
+    return state.days.map(element => element.name === state.day ? day : element);
   }
 
   // Getting the data from scheduler-api with axios
@@ -70,5 +93,5 @@ export default function useApplicationData() {
       });
   }, []);
 
-  return { state, setDay, bookInterview, cancelInterview };
+  return { state, setDay, bookInterview, cancelInterview, updateSpots };
 }
