@@ -58,7 +58,6 @@ export default function useApplicationData() {
   function updateSpots(state, appointments) {
     // find the day matching state.day, save its object into dayObj
     const dayObj = state.days.find(element => element.name === state.day);
-    console.log('#1', appointments);
 
     // counter for spots
     let spots = 0;
