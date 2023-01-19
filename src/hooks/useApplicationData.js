@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import "components/Application.scss";
 import "components/Appointment";
 
@@ -26,7 +26,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
-    return Axios.put(`/api/appointments/${id}`, appointment)
+    return axios.put(`/api/appointments/${id}`, appointment)
       .then(() => {
         const updatedDays = updateSpots(state, appointments);
         setState({ ...state, appointments, days: updatedDays });
@@ -47,7 +47,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
 
-    return Axios
+    return axios
       .delete(`/api/appointments/${id}`)
       .then(() => {
         const updatedDays = updateSpots(state, appointments);
@@ -82,9 +82,9 @@ export default function useApplicationData() {
   useEffect(() => {
 
     Promise.all([
-      Axios.get('/api/days'),
-      Axios.get('/api/appointments'),
-      Axios.get('/api/interviewers')
+      axios.get('/api/days'),
+      axios.get('/api/appointments'),
+      axios.get('/api/interviewers')
     ])
       // Our res is an array of the response received: [{days}, {appts}]
       .then(res => {
