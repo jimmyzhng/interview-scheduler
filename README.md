@@ -4,13 +4,13 @@ Interview Scheduler is a single-paged application for students to create, edit, 
 Unit, integration and end-to-end testing completed with Storybook, Jest, and Cypress!
 
 ## The Project:
-!["Homepage"]
+!["Homepage"](https://github.com/jimmyzhng/interview-scheduler/blob/master/docs/is-home.png)
 
-!["Editing Name And Interviewer"]
+!["Editing Name And Interviewer"](https://github.com/jimmyzhng/interview-scheduler/blob/master/docs/is-edit.png)
 
-!["Deleting"]
+!["Deleting"](https://github.com/jimmyzhng/interview-scheduler/blob/master/docs/is-delete.png)
 
-!["Status"]
+!["Status"](https://github.com/jimmyzhng/interview-scheduler/blob/master/docs/is-status.png)
 
 ## Setup
 
