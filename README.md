@@ -1,23 +1,33 @@
 # Interview Scheduler
+Interview Scheduler is a single-paged application for students to create, edit, and delete interview appointments. This application relies on an API server for a PostgreSQL database of students and interviewers. This can be found [here](https://github.com/jimmyzhng/scheduler-api).
+
+Unit, integration and end-to-end testing completed with Storybook, Jest, and Cypress!
+
+## The Project:
+!["Homepage"]
+
+!["Editing Name And Interviewer"]
+
+!["Deleting"]
+
+!["Status"]
 
 ## Setup
 
-Install dependencies with `npm install`.
+1) Install dependencies with `npm install`
 
-## Running Webpack Development Server
+2) Clone the [Scheduler-API](https://github.com/jimmyzhng/scheduler-api) database, and follow instructions on the README file. Once completed, we run `npm start` for this server. When the Scheduler API is up and running, we can run our application!
 
-```sh
-npm start
-```
+3) We run the Webpack Development Server with ```npm start```
 
-## Running Jest Test Framework
+4) For the Jest Test Framework, we run ```npm test```
 
-```sh
-npm test
-```
+5) For the Storybook Visual Testbed, we have the command ```npm run storybook```
 
-## Running Storybook Visual Testbed
+6) Cypress testing was definitely the most interesting testing software we used, and this can be run with ```npm run cypress```
 
-```sh
-npm run storybook
-```
+## Dependencies
+* React
+* Webpack, Babel
+* Axios
+* Storybook, Jest, Cypress, Testing Library
