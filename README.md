@@ -6,7 +6,7 @@ Unit, integration and end-to-end testing completed with Storybook, Jest, and Cyp
 
 ## Demo
 
-![Demo]('docs/scheduler-gif-demo.gif')
+![Demo](docs/scheduler-gif-demo.gif)
 
 ## Setup
 
